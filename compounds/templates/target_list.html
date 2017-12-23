@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="target_list">
+                {% for target in related_targets %}
+                    <div class="col-xs-6 col-md-3">
+                        {{ target.target_name }}(<a href="{{ target.uniprot_link }}">{{ target.uniprot_name }}</a>)
+{#                        <a href="{{ target. }}" class="thumbnail">{{ herb.English_name }}</a>#}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block js %}
+{% endblock js %}

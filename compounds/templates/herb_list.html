@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="herb_list">
+                {% for herb in herbs %}
+                    <div class="col-xs-6 col-md-3">
+                    {% if herb.image %}
+                        <a href="{{ herb.get_absolute_url }}" class="thumbnail">
+                            <img src="{{ herb.image.url }}" alt="Herb Image" style="width: 300px; height: 300px">
+                            <abbr title="{{ herb.Engish_name }}">{{ herb.English_name | truncatechars:10}}</abbr>
+                        </a>
+                    {% else %}
+                        <a href="{{ herb.get_absolute_url }}" class="thumbnail">
+                            {{ herb.Chinese_name }} ({{ herb.English_name }}) Not found
+                        </a>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{#    {% if is_paginated %}#}
+{#        <div class="pagination">#}
+{#            <span class="page-links">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <a class="btn btn-default" href="/yatcm/structure/all?page={{ page_obj.previous_page_number }}">previous</a>#}
+{#                {% endif %}#}
+{#                <span class="page-current">#}
+{#                    Page {{ structures.number }} of {{ page_obj.paginator.num_pages }}#}
+{#                </span>#}
+{#                {% if page_obj.has_next %}#}
+{#                    <a class="btn btn-default"#}
+{#                       href="/yatcm/structure/all?page={{ page_obj.next_page_number }}">next</a>#}
+{#                {% endif %}#}
+{#            </span>#}
+{#        </div>#}
+{#    {% endif %}#}
+{% endblock content %}
+{% block js %}
+{% endblock js %}

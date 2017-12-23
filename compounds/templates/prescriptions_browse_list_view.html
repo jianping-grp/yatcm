@@ -1,0 +1,36 @@
+{% extends 'browse.html' %}
+{% load static staticfiles bootstrap_pagination %}
+{% block css %}
+    <link href="{% static 'css/browse.css' %}" rel="stylesheet">
+{% endblock %}
+{% block browse-table %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phonetic name</th>
+            <th>Chinese name</th>
+            <th>Components</th>
+            <td>Detail</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for prescription in  prescription_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ prescription.english_name }}</td>
+                <td>{{ prescription.pinyin_name }}</td>
+                <td> {{ prescription.chinese_name }}</td>
+                {% if prescription.herbs.all %}
+                    <td>{{ prescription.herbs.all | length }}</td>
+                    {% else %}
+                    <td></td>
+                {% endif %}
+            <td><a href="{% url 'prescription_detail' prescription.id %}">view</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% bootstrap_paginate page_obj range=10 %}
+{% endblock %}

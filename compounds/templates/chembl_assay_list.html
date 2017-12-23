@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="herb_list">
+                {% for chembl in chembls %}
+                    <div class="col-xs-6 col-md-3">
+                    <a href="{{ chembl.url }}" class="thumbnail">{{ chembl.chembl_id }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+{% endblock js %}

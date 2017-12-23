@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="compound_list">
+                {% for compound in compounds %}
+                    <div class="col-xs-6 col-md-3">
+                    {% if compound.mol_image %}
+                        <a href="{{ compound.get_absolute_url }}" class="thumbnail">
+                            <img src="{{ compound.mol_image.url }}" alt="compound image" style="width: 300px">
+                            <abbr title="{{ compound.english_name }}">{{ compound.english_name | truncatechars:19}}</abbr>
+                        </a>
+                    {% else %}
+                        <a href="{{ compound.get_absolute_url }}" class="thumbnail">
+                            Molecule image is not found
+                        </a>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{#    {% if is_paginated %}#}
+{#        <div class="pagination">#}
+{#            <span class="page-links">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <a class="btn btn-default" href="/yatcm/structure/all?page={{ page_obj.previous_page_number }}">previous</a>#}
+{#                {% endif %}#}
+{#                <span class="page-current">#}
+{#                    Page {{ structures.number }} of {{ page_obj.paginator.num_pages }}#}
+{#                </span>#}
+{#                {% if page_obj.has_next %}#}
+{#                    <a class="btn btn-default"#}
+{#                       href="/yatcm/structure/all?page={{ page_obj.next_page_number }}">next</a>#}
+{#                {% endif %}#}
+{#            </span>#}
+{#        </div>#}
+{#    {% endif %}#}
+{% endblock content %}
+{% block js %}
+{% endblock js %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static staticfiles %}
+{% block css %}
+<style type="text/css">
+.cpd-img{
+    max-height: 128px;
+    max-width: 128px;
+}
+</style>
+{% endblock %}
+{% block content %}
+    <div>
+        <h3 class="page-header">
+            Similarity mapping of YaTCM compounds to {{ keggpathway.name }}
+            (<a href="{{ keggpathway.get_kegg_url }}" target="_blank">{{ keggpathway.kegg_id }})
+            </a>
+        </h3>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <th>Compounds of this pathway</th>
+            <th>Ingredients from YaTCM</th>
+            <th>View in map</th>
+            </thead>
+            <tbody>
+            {% for kegg_cpd in keggpathway.keggcompound_set.all %}
+                {% if kegg_cpd.similar_to_tcm.all %}
+                    {% for tcm_cpd in kegg_cpd.similar_to_tcm.all %}
+                        <tr>
+                            <td>
+                                <img class="cpd-img" src="{{ kegg_cpd.get_kegg_img }}" alt="KEGG ID: {{ kegg_cpd.kegg_id }}">
+                            </td>
+                            <td>
+                                <img class="cpd-img" src="{{ tcm_cpd.mol_image.url }}" alt="YaTCM ID: {{ tcm_cpd.id }}">
+                            </td>
+                            <td>
+                                <a href="javascript:void(window.open('{% url "compound_pathway_mapping_view" tcm_cpd.id keggpathway.kegg_id %}'))">Open</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

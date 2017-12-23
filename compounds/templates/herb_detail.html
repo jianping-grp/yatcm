@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load staticfiles static i18n %}
+{% block css %}
+
+{% endblock css %}
+
+{% block content %}
+
+    <!-- herb information -->
+    <div class="container">
+        <div class="row">
+            <h4>{{ herb.English_name }}</h4>
+            <div id="herb_image" class="col-md-4">
+                {% if herb.image %}
+                <a href="{{ herb.wiki_link }}">
+                    <img class="img-responsive" src="{{ herb.image.url }}" alt="{{ herb.Chinese_name }} image">
+                    <span>{{ herb.image.name }}</span>
+                </a>
+                {% else %}
+                Picture of {{ herb.English_name }} is not found
+                {% endif %}
+            </div>
+            <div id="herb_info" class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ herb.English_name }}</div>
+{#                    <div class="panel-body"><p>{{ herb.describe }}</p></div>#}
+
+                    <!-- list group -->
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            Latin name: {{ herb.latin_name }}
+                        </li>
+                        <li class="list-group-item">
+                            Chinese name: {{ herb.Chinese_name }}
+                        </li>
+                        <li class="list-group-item">
+                            phonetic name: {{ herb.pinyin_name | title}}
+                        </li>
+                        <li class="list-group-item">
+                            medicinal part: {{ herb.use_part }}
+                        </li>
+                        <li class="list-group-item">
+                            link:
+                            <a href="{{ herb.wiki_english }}">English-wiki</a>&nbsp;
+                            <a href="{{ herb.wiki_chinese }}">Chinese-wiki</a>
+                        </li>
+                        {% if taxonomy_list %}
+                            <li class="list-group-item">
+                            taxonomy:
+                                {% for taxononmy in taxonomy_list %}
+                                    <a href="{{ taxonomy.ncbi_link }}">-->{{ taxononmy.name }}</a>
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="property">
+    <head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left
+        }
+        th {
+            background-color: grey;
+        }
+        table#t01 tr:nth-child(even) {
+            background: #eee
+        }
+        table#t01 tr:nth-child(odd) {
+            background: #fff;
+        }
+        table#t01 th {
+            background-color: grey;
+            color: white;
+        }
+    </style>
+    <head>
+    <body>
+    <table style="width:100%">
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+            <th>Reference</th>
+        </tr>
+        <tr>
+        <td>Catagory</td>
+        {% if herb.first_catagory_chinese %}
+            <td>{{ herb.first_catagory_chinese }}({{ herb.first_catagory_english }})</td>
+            <td></a><a href="http://tcm.cmu.edu.tw/download.php?menuid=5">Database@Taiwan</a></td>
+        {% else %}
+            <td>Not Found</td>
+            <td>Not Found</td>
+        {% endif %}
+        <tr>
+            <td>Effect</td>
+            {% if herb.effect %}
+                <td>{{ herb.effect }}</td>
+                <td><a href={{ tcmid_url }}>TCMID</a></td>
+            {% else %}
+                <td>Not Found</td>
+                <td>Not Found</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Indication</td>
+            {% if herb.indication %}
+                <td>{{ herb.indication }}</td>
+                <td><a href={{ tcmid_url }}>TCMID</a></td>
+            {% else %}
+                <td>Not Found</td>
+                <td>Not Found</td>
+            {% endif %}
+        </tr>
+    </table>
+    </body>
+    </div>
+
+    <div id="related herbs">
+    <h4>Related herbs: &nbsp;<a href="{% url "herb_related_herbs" herb.pk %}">{{ herbs.count }} records </h4>
+        {% for herb in herbs%}
+            <a href="{{ herb.get_absolute_url }}">{{ herb.English_name }};&nbsp</a>
+        {% endfor %}
+{#        <a href="{% url "herb_related_herbs" herb.pk %}">{{ herbs_ten_to_last.count }} more</a>#}
+    </div>
+
+{#    <div id="related_herbs">#}
+{#    <hr>#}
+{#    <h4>Related Herbs</h4>#}
+{#    <table class="table table-responsive" id="t01">#}
+{#        <tr>#}
+{#            <th style="width: 33%">Related Herbs</th>#}
+{#            <td><a href="{% url "herb_related_herbs" herb.pk %}">{{ herbs.count}} records</a></td>#}
+{#        </tr>#}
+{#    </table>#}
+{#    </div>#}
+
+
+    <!-- herb ingredient -->
+{#    <div id="ingredient">#}
+{#    <hr>#}
+{#    <h4>Ingredients</h4>#}
+{#    <table class="table table-responsive" id="t01">#}
+{#        <tr>#}
+{#            <th style="width: 33%">Ingredients</th>#}
+{#            <td><a href="{% url "herb_related_compounds" herb.pk %}">{{ herb.compounds.count}} records</a></td>#}
+{#        </tr>#}
+{#    </table>#}
+{#    </div>#}
+
+{#    <div id="Ingredients">#}
+{#    <h4>Ingredients: &nbsp;<a href="{% url "herb_related_compounds" herb.pk %}">{{ herb.compounds.count }} records </h4>#}
+{#        {% for compound in compounds %}#}
+{#            <a href="{{ compound.get_absolute_url }}">{{ compound.english_name }};&nbsp</a>#}
+{#        {% endfor %}#}
+{#        <a href="{% url "herb_related_compounds" herb.pk %}">{{ compounds_30_last.count }} more</a>#}
+{#    </div>#}
+
+
+    <h4>Ingredients: &nbsp;<a href="{% url "herb_related_compounds" herb.pk %}">{{ herb.compounds.count }} records</a></h4>
+    <div id="Ingredients" style="float:left">
+    <table id="t01" style="width:100%">
+        <tr>
+            <th>English Name</th>
+            <th>Structrue</th>
+        </tr>
+        {% if compounds.count >= 20 %}
+            {% for compound in compounds_1_10 %}
+                <tr>
+                    <td><a href="{{ compound.get_absolute_url }}">{{ compound.english_name|truncatechars:40 }}</a></td>
+                    {% if compound.mol_image %}
+                        <td><img class="img-responsive" src="{{ compound.mol_image.url }}" alt="compound picture" style="height: 100px;"></td>
+                    {% else %}
+                        <td>Molecular structure is Not generated</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td colspan="2"><a href="{% url "herb_related_compounds" herb.pk %}">{{ compounds_20_last.count }} more</a></td>
+                </tr>
+        {% else %}
+            {% for compound in compounds_previous %}
+                <tr>
+                    <td><a href="{{ compound.get_absolute_url }}">{{ compound.english_name|truncatechars:40 }}</a></td>
+                    {% if compound.mol_image %}
+                        <td><img class="img-responsive" src="{{ compound.mol_image.url }}" alt="compound picture" style="height: 100px;"></td>
+                    {% else %}
+                        <td>Molecular Structure is Not generated</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+    </div>
+
+    <div style="float:left;margin-left: 0.5cm;">
+    <table id="t01" style="width:100%">
+        <tr>
+            <th>English Name</th>
+            <th>Structrue</th>
+        </tr>
+        {% if compounds.count >= 20 %}
+            {% for compound in compounds_10_20 %}
+                <tr>
+                    <td><a href="{{ compound.get_absolute_url }}">{{ compound.english_name|truncatechars:40 }}</a></td>
+                    {% if compound.mol_image %}
+                        <td><img class="img-responsive" src="{{ compound.mol_image.url }}" alt="compound picture" style="height: 100px;"></td>
+                    {% else %}
+                        <td>Molecular Structure is Not generated</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            {% for compound in compounds_last %}
+                <tr>
+                    <td><a href="{{ compound.get_absolute_url }}">{{ compound.english_name|truncatechars:40 }}</a></td>
+                    {% if compound.mol_image %}
+                        <td><img class="img-responsive" src="{{ compound.mol_image.url }}" alt="compound picture" style="height: 100px;"></td>
+                    {% else %}
+                        <td>Molecular Structure is Not generated</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+    </div>
+
+
+
+{#<div id="herb_related_prescription" style="">#}
+{#    <h4>Prescription</h4>#}
+{#    <table>#}
+{#        <tr>#}
+{#            <th>Prescription</th>#}
+{#            <th>components</th>#}
+{#        </tr>#}
+{#    </table>#}
+{#</div>#}
+
+{% endblock content%}
+
+{% block js %}
+
+{% endblock js %}

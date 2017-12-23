@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load staticfiles static i18n %}
+{% block content %}
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: grey;
+        }
+        table#t01 tr:nth-child(even) {
+            background: #eee
+        }
+        table#t01 tr:nth-child(odd) {
+            background: #fff;
+        }
+        table#t01 th {
+            background-color: grey;
+            color: white;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8" id="prescription_info">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title"><h3 class="text-center"><strong>{{ prescription.chinese_name }}</strong></h3></div>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Chinese name：</strong>{{ prescription.chinese_name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>English name： </strong>{{ prescription.english_name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Phonetic name: </strong>{{ prescription.pinyin_name | title}}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Prescription herbs：</strong>
+{#                            {{ prescription.zucheng }}#}
+                            {% for herb in prescription.herbs.all %}
+                                {% if herb.English_name %}
+                                    <a href="{{ herb.get_absolute_url }}">{{ herb.English_name }};&nbsp;</a>
+                                {% else %}
+                                    <a href="{{ herb.get_absolute_url }}">{{ herb.pinyin_name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+
+                        <h4><strong>Ingredients</strong></h4>
+{#                        <h5><strong>{{ compounds | length }} records</strong></h5>#}
+                        <table>
+                            <caption><h5><strong>{{ compounds | length }} records</strong></h5></caption>
+                            <tr>
+                                <th>Herbs</th>
+                                <th colspan="5">Structures</th>
+                            </tr>
+                            {% for herb in prescription.herbs.all %}
+                                <tr>
+                                    <td><a href="{{ herb.get_absolute_url }}">{{ herb.English_name }}</a></td>
+                                    <td><a href="{% url "herb_related_compounds" herb.pk %}">{{ herb.compounds.all | length }}</a> records</td>
+{#                                    <td>{{ herb.English_name }}</td>#}
+{#                                    <td>{{ herb.Chinese_name }}</td>#}
+{#                                    <td>{{ herb.Chinese_name }}</td>#}
+{#                                    <td>{{ herb.Chinese_name }}</td>#}
+{#                                    <td>{{ herb.Chinese_name }}</td>#}
+{#                                    <td>{{ herb.Chinese_name }}</td>#}
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+
+                        <li class="list-group-item">
+                            <strong>Traditional Explanation:</strong>{{ prescription.fangjie }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Traditional Explanation (Translation): </strong>Translation is Coming.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Traditional Usage： </strong>{{ prescription.yongfa }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Traditional Usage (Translation): </strong>Translation is Coming.
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Traditional Application: </strong>{{ prescription.chinese_indiction }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Traditional Application (Translation): </strong>{{ prescription.english_indiction }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Modern usage： </strong>{{ prescription.chinese_modern_application }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Modern Usage (Translation): </strong>{{ prescription.english_modern_application }}
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12" id="related_prescription">
+                    <ul class="list-group">
+
+                        {% if prescription.main_prescription %}
+                            <li class="list-group-item list-group-item-success"><h4>Primary Prescription</h4></li>
+                            <li class="list-group-item">
+                                {% if prescription.main_prescription.english_name %}
+                                    <a href="{% url 'prescription_detail' prescription.main_prescription_id %}">
+                                        {{prescription.main_prescription.english_name }}
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'prescription_detail' prescription.main_prescription_id %}">
+                                        {{ prescription.main_prescription.pinyin_name }}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-success"><h4>Secondary Prescriptions</h4></li>
+                            {% for pre in prescription.prescription_set.all %}
+                                <li class="list-group-item">
+                                    {% if pre.english_name %}
+                                        <a href="{{ pre.get_absolute_url }}">
+                                           {{ pre.chinese_name }} ({{ pre.enlish_name | title }})
+                                        </a>
+                                    {% else %}
+                                        {{ pre.chinese_name }} (<a href="{{ pre.get_absolute_url }}">
+                                            {{ pre.pinyin_name | title}})
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>  <!-- related prescription -->
+
+                <div id="related_herb" class="col-md-12">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success"><h4>Components</h4></li>
+                        {% for herb in prescription.herbs.all %}
+                            {% if herb.English_name %}
+                                <li class="list-group-item">
+                                    {{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.English_name }}</a>)
+                                </li>
+                            {% else %}
+                                <li class="list-group-item">
+                                    {{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.pinyin_name }}</a>)
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

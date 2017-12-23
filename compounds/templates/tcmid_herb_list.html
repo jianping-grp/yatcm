@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="herb_list">
+                {% for herb in tcmid_herbs %}
+                    <div class="col-xs-6 col-md-3">
+                    <a href="{{ herb.tcmid_link }}" class="thumbnail">{{ herb.English_name }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block js %}
+{% endblock js %}

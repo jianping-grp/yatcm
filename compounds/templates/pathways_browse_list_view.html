@@ -1,0 +1,30 @@
+{% extends 'browse.html' %}
+{% load static staticfiles bootstrap_pagination %}
+{% block css %}
+    <link href="{% static 'css/browse.css' %}" rel="stylesheet">
+{% endblock %}
+{% block browse-table %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Pathway name (a-z)</th>
+            <th>View in KEGG</th>
+            <th>Detail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pathway in  pathway_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ pathway.category.name }}</td>
+            <td>{{ pathway.name }}</td>
+                <td><a href="{{ pathway.get_kegg_url }}">{{ pathway.kegg_id }}</a> </td>
+            <td><a href="{% url 'pathway_detail' pathway.id %}">view</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% bootstrap_paginate page_obj range=10 %}
+{% endblock %}

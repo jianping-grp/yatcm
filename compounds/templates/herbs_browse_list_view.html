@@ -1,0 +1,34 @@
+{% extends 'browse.html' %}
+{% load static staticfiles bootstrap_pagination %}
+{% block css %}
+    <link href="{% static 'css/browse.css' %}" rel="stylesheet">
+{% endblock %}
+{% block browse-table %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Phonetic name</th>
+            <th>Chinese name</th>
+            <th>Ingredients</th>
+            <th>Detail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for herb in  herb_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><img src="{{ herb.image }}" class="img-table img-thumbnail img-table"></td>
+                <td>{{ herb.English_name }}</td>
+                <td>{{ herb.pinyin_name }}</td>
+                <td> {{ herb.Chinese_name }}</td>
+                <td><a href="{% url "herb_related_compounds" herb.pk %}">{{ herb.compounds.all | length }}</a></td>
+            <td><a href="{% url 'herb_detail' herb.id %}">view</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% bootstrap_paginate page_obj range=10 %}
+{% endblock %}

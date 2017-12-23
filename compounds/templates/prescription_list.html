@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="Prescription_list" class="panel panel-default">
+{#                <div class="panel-heading">#}
+{#                    <div class="panel-title">#}
+{#                        <h3>{{ herb.chinese_name }}</h3>#}
+{#                    </div>#}
+{#                </div>#}
+                <ul class="list-group">
+                    {% for prescription in prescriptions %}
+                        <li class="list-group-item list-group-item-info">
+                            {% if prescription.english_name %}
+                                {{ prescription.chinese_name }}(<a href="{{ prescription.get_absolute_url }}">【{{ prescription.english_name }}】: </a>)
+                            {% else %}
+                                {{ prescription.chinese_name }}(<a href="{{ prescription.get_absolute_url }}">【{{ prescription.pinyin_name }}】: </a>)
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            {% for herb in prescription.herbs.all %}
+                                {% if herb.English_name %}
+                                    {{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.English_name }}</a>)
+                                {% else %}
+                                    {{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.pinyin_name }}</a>)
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+{#    {% if is_paginated %}#}
+{#        <div class="pagination">#}
+{#            <span class="page-links">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <a class="btn btn-default" href="/yatcm/structure/all?page={{ page_obj.previous_page_number }}">previous</a>#}
+{#                {% endif %}#}
+{#                <span class="page-current">#}
+{#                    Page {{ structures.number }} of {{ page_obj.paginator.num_pages }}#}
+{#                </span>#}
+{#                {% if page_obj.has_next %}#}
+{#                    <a class="btn btn-default"#}
+{#                       href="/yatcm/structure/all?page={{ page_obj.next_page_number }}">next</a>#}
+{#                {% endif %}#}
+{#            </span>#}
+{#        </div>#}
+{#    {% endif %}#}
+{% endblock content %}
+{% block js %}
+{% endblock js %}

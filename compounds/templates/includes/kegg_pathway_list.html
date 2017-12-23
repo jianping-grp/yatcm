@@ -1,0 +1,19 @@
+{% load static %}
+<style>
+</style>
+<!-- template to display the pathway information -->
+{% if pathway %}
+    <hr/>
+    <div>
+        <div class="row">
+            <div class="col-md-9" id="herb-info">
+                <dl class="dl-horizontal" id="herb_dl">
+                    <dt>Pathway Name:</dt>
+                    <dd><a href="{{ pathway.get_kegg_url }}" target="_blank">{{ pathway.name}}</a></dd>
+                    <dt>Show the pathway:</dt>
+                    <dd><a href="javascript:void(window.open('{% url "compound_pathway_mapping_view" compound.id pathway.kegg_id %}'))">Open</a></dd>
+                </dl>
+            </div>
+        </div> <!-- end row -->
+    </div>
+{% endif %}

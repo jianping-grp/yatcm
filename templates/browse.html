@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static staticfiles i18n %}
+{% block css %}
+{#    <link href="{% static "js/jtable.2.4.0/themes/metro/blue/jtable.min.css" %}" rel="stylesheet" type="text/css">#}
+{#    <link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">#}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+         <div class="col-md-3">
+             <div class="list-group">
+                 <a href="#" class="list-group-item disabled"><b>Browse the database.</b></a>
+                 <a href="{% url 'browse-herbs' %}" class="list-group-item">Herbs</a>
+                 <a href="{% url 'browse-prescriptions' %}" class="list-group-item">Prescriptions</a>
+                 <a href="{% url 'browse-pathways' %}" class="list-group-item">Pathways</a>
+             </div>
+         </div>
+            <div class="col-md-9">
+                {% block browse-table %}
+                    {% endblock %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

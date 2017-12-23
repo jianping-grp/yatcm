@@ -1,0 +1,76 @@
+{% load static staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KEGG pathway mapping</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.maphilight.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.map').maphilight({
+                fillColor: 'red'
+            });
+        })
+    </script>
+<style type="text/css">
+.cpd-img{
+    max-height: 164px;
+    max-width: 164px;
+}
+</style>
+</head>
+<body>
+<div>
+    <h1>KEGG Pathway mapping </h1>
+    <h3 class='page-header'>
+        <a href="{{ pathway.get_kegg_url }}" target="_blank">{{ pathway.name }}</a>
+    </h3>
+    <p>Correspond compounds are highlighted in red. </p>
+</div>
+<div>
+    <img class="map" src="{{ pathway.get_kegg_image }}" alt="loading kegg path" id="kegg_pathway"
+         usemap="#pathway_data">
+    <map name="pathway_data">
+        {% for cpd, coords in mapping_kegg_cpds.items %}
+            {% for x, y in coords %}
+                <area id="{{ x }},{{ y }},4" shape="circle" coords="{{ x }},{{ y }},10" class="group"
+                      data-toggle="modal"
+                      data-target="#nodeModal"
+                      data-title="Pair-wise similarity of compounds from YaTCM to KEGG Pathway"
+                      data-body='<table class="table"><thead><tr><th>KEGG</th><th>YaTCM</th></tr></thead><tbody><tr><td><img class="cpd-img well-lg" src="http://www.genome.jp/Fig/compound/{{ cpd }}.gif"></td><td><img class="cpd-img" src="{{ tcm_cpd.mol_image.url }}" alt="YaTCM ID: {{ tcm_cpd.id }}"></td></tr></tbody></table>'
+                      data-maphilight='{"strokeColor":"#0000","strokeWidth":1,"fillColor":"ff0000","fillOpacity":0.6, "alwaysOn": true}'>
+            {% endfor %}
+        {% endfor %}
+        <div class="modal fade" id="nodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title-id">Title</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body-id">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </map>
+</div>
+<script>
+$('#nodeModal').on('show.bs.modal', function (event) {
+    var node = $(event.relatedTarget);
+    var title = node.data('title');
+    var body_content = node.data('body');
+    console.log(body_content);
+    var modal = $(this);
+    modal.find("#modal-title-id").html(title);
+    modal.find('#modal-body-id').html(body_content);
+
+})
+</script>
+</body>
+</html>

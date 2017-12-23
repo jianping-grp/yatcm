@@ -1,0 +1,47 @@
+<div class="row">
+    {% if prescriptions %}
+        <h3 class="text-info" id="prescription-result-header">Prescriptions</h3>
+        <table class="table table-responsive table-bordered">
+            <thead class="text-center">
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Related Herbs</th>
+{#                <th class="text-center">Related Prescriptions</th>#}
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for prescription in prescriptions %}
+                <tr>
+                    {% if prescription.english_name %}
+                        <td>{{ prescription.chinese_name }}(<a href="{{ prescription.get_absolute_url }}">{{ prescription.english_name }}</a>)</td>
+                    {% else %}
+                        <td>{{ prescription.chinese_name }}(<a href="{{ prescription.get_absolute_url }}">{{ prescription.pinyin_name }}</a>)</td>
+                    {% endif %}
+                    <td>
+                        {% for herb in prescription.herbs.all %}
+                            {% if herb.English_name %}
+                                <span>{{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.English_name }}</a>)</span>
+                            {% else %}
+                                <span>{{ herb.Chinese_name }}(<a href="{{ herb.get_absolute_url }}">{{ herb.pinyin_name }}</a>)</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+{#                    {% if prescription.main_prescription %}#}
+{#                        <td>#}
+{#                            <a href="{% url 'prescription_detail' prescription.main_prescription_id %}">#}
+{#                                {{prescription.main_prescription.chinese_name }}#}
+{#                            </a>#}
+{#                        </td>#}
+{#                    {% else %}#}
+{#                        <td>#}
+{#                            {% for vic_prescription in prescription.prescription_set.all %}#}
+{#                                <span><a href="{{ vic_prescription.get_absolute_url }}">{{ vic_prescription.chinese_name }}</a></span>#}
+{#                            {% endfor %}#}
+{#                        </td>#}
+{#                    {% endif %}#}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>

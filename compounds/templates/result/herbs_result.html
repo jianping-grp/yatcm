@@ -1,0 +1,39 @@
+<div class="row">
+    {% if herbs %}
+        <h3 class="text-info" id="herb-result-header">Herbs</h3>
+        <table class="table table-responsive table-bordered" id="herb-table">
+            <thead>
+            <tr>
+{#                <th class="text-center">yatcm ID</th>#}
+                <th class="text-center">Chinese Name</th>
+                <th class="text-center">English Name</th>
+                <th class="text-center">Ingredients</th>
+                <th class="text-center">Related Prescripts</th>
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for herb in herbs %}
+                <tr>
+{#                    <td class="text-center">YaTCM ID: {{ herb.pk }}</td>#}
+                    <td>
+                        <a href="{{ herb.get_absolute_url }}">{{ herb.Chinese_name }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ herb.get_absolute_url }}">{{ herb.English_name }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url "herb_related_compounds" herb.pk %}">
+                            {{ herb.compounds.count }} records
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url "herb_related_prescription" herb.pk %}">
+                            {{ herb.prescription_set.count }} records
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
